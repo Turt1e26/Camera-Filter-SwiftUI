@@ -63,7 +63,7 @@ struct ContentView: View {
                 }
                 
                 HStack{
-                    Button("sepia"){
+                    Button("Sepia"){
                         if let imputImage = selectedImage{
                             let beginImage = CIImage(image: imputImage)
                             let currentFilter = CIFilter.sepiaTone()
@@ -79,12 +79,47 @@ struct ContentView: View {
                         }
                     }
                     
-                    Button("blur"){
+                    Button("Blur"){
                         if let imputImage = selectedImage{
                             let beginImage = CIImage(image: imputImage)
-                            let currentFilter = CIFilter.motionBlur()
+                            let currentFilter = CIFilter.boxBlur()
                             currentFilter.inputImage = beginImage
+                            currentFilter.radius = 45
                            
+                            
+                            guard let outputImage = currentFilter.outputImage else { return }
+                            if let cgImage =  context.createCGImage(outputImage, from: outputImage.extent){
+                                let uiImage = UIImage(cgImage: cgImage)
+                                self.selectedImage = uiImage
+                            }
+                            
+                        }
+                    }
+                    
+                    Button("Gamma"){
+                        if let imputImage = selectedImage{
+                            let beginImage = CIImage(image: imputImage)
+                            let currentFilter = CIFilter.gammaAdjust()
+                            currentFilter.inputImage = beginImage
+                            currentFilter.power = -5
+                            
+                           
+                            
+                            guard let outputImage = currentFilter.outputImage else { return }
+                            if let cgImage =  context.createCGImage(outputImage, from: outputImage.extent){
+                                let uiImage = UIImage(cgImage: cgImage)
+                                self.selectedImage = uiImage
+                            }
+                            
+                        }
+                    }
+                    
+                    Button("Thermal"){
+                        if let imputImage = selectedImage{
+                            let beginImage = CIImage(image: imputImage)
+                            let currentFilter = CIFilter.thermal()
+                            currentFilter.inputImage = beginImage
+                    
                             
                             guard let outputImage = currentFilter.outputImage else { return }
                             if let cgImage =  context.createCGImage(outputImage, from: outputImage.extent){
